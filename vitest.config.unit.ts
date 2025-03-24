@@ -3,8 +3,8 @@ import { defineConfig } from 'vitest/config'
 export default defineConfig({
   test: {
     include: [
-      'src/**/*.test.ts',
-      '!src/tests'
+      'tests/unit/**/*.test.ts',
+      'tests/unit/**/*.spec.ts'
     ]
   },
   resolve: {

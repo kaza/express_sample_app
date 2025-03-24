@@ -1,23 +1,23 @@
-import * as QuoteController from './quotes.controller'
-import * as QuoteService from './quotes.service'
-import * as TagService from './tags.service'
+import * as QuoteController from '../../src/quotes/quotes.controller'
+import * as QuoteService from '../../src/quotes/quotes.service'
+import * as TagService from '../../src/quotes/tags.service'
 import type { Request, Response } from 'express'
-import { AppError } from 'lib/utility-classes'
+import { AppError } from '../../src/lib/utility-classes'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-vi.mock('quotes/quotes.service', () => ({
+vi.mock('../../src/quotes/quotes.service', () => ({
   getQuotesByUser: vi.fn(),
   createQuote: vi.fn(),
   getQuoteById: vi.fn(),
   deleteQuote: vi.fn()
 }))
 
-vi.mock('quotes/tags.service', () => ({
+vi.mock('../../src/quotes/tags.service', () => ({
   deleteOrphanedTags: vi.fn(),
   upsertTags: vi.fn()
 }))
 
-vi.mock('lib/utility-classes', () => ({
+vi.mock('../../src/lib/utility-classes', () => ({
   AppError: class {
     constructor(public type: string, public message: string) {}
   }

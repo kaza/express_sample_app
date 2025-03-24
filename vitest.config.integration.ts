@@ -1,6 +1,5 @@
 // vitest.config.integration.ts
 import { defineConfig } from 'vitest/config'
-import { loadEnv } from 'vite'
 import * as fs from 'fs'
 import * as dotenv from 'dotenv'
 
@@ -21,9 +20,12 @@ if (!process.env.DATABASE_URL) {
 
 export default defineConfig({
   test: {
-    include: ['src/tests/**/*.test.ts', 'src/tests/*.test.ts'],
+    include: [
+      'tests/integration/**/*.test.ts',
+      'tests/integration/**/*.spec.ts'
+    ],
     threads: false,
-    setupFiles: ['src/tests/helpers/setup.ts'],
+    setupFiles: ['tests/helpers/setup.ts'],
     environment: 'node',
     globals: true,
     env: {
