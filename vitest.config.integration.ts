@@ -17,10 +17,7 @@ try {
   console.error('Error loading .env.test file:', error);
 }
 
-// Explicitly set DATABASE_URL if not already set
-if (!process.env.DATABASE_URL) {
-  process.env.DATABASE_URL = "postgres://postgres:postgres@localhost:5432/quotes"
-}
+
 
 export default defineConfig({
   test: {
@@ -32,9 +29,9 @@ export default defineConfig({
     setupFiles: ['tests/helpers/setup.ts'],
     environment: 'node',
     globals: true,
-    env: {
-      DATABASE_URL: process.env.DATABASE_URL
-    }
+    reporters: ['verbose'],
+    slowTestThreshold: 50,
+
   },
   resolve: {
     alias: {
