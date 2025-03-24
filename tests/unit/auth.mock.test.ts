@@ -139,5 +139,32 @@ describe('Authentication Endpoints (Mocked)', () => {
         where: { username: 'testuser' }
       });
     });
+
+    it('should return an error if credentials are invalid', async () => {
+      // Create a real hashed password that matches 'password123'
+      const hashedPassword = bcrypt.hashSync('password123', 8);
+      
+      // Mock findFirst to return an existing user with the real hashed password
+      mockedPrisma.user.findFirst.mockResolvedValue({
+        id: 1,
+        username: 'testuser',
+        password: hashedPassword
+      });
+
+      const res = await request(app)
+        .post('/auth/signin')
+        .send({
+          username: 'testuser',
+          password: 'wrongpassword', // Using wrong password
+        });
+
+      expect(res.statusCode).toEqual(401);
+      expect(res.body).toHaveProperty('error', 'Invalid credentials');
+      
+      // Verify findFirst was called with correct parameters
+      expect(mockedPrisma.user.findFirst).toHaveBeenCalledWith({
+        where: { username: 'testuser' }
+      });
+    });
   });
 }); 
