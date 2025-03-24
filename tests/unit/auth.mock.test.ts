@@ -54,19 +54,18 @@ describe('Authentication Endpoints (Mocked)', () => {
 
   describe('POST /auth/signup', () => {
     it('should create a new user and return a token', async () => {
+      const startTime = performance.now();
+      
       // Mock the findFirst method to return null
-      // This simulates that the username doesn't exist yet
       mockedPrisma.user.findFirst.mockResolvedValue(null);
       
       // Mock the create method to return a fake user
-      // This simulates successfully creating a new user
       mockedPrisma.user.create.mockResolvedValue({
         id: 1,
         username: 'newuser',
         password: 'hashedpassword'
       });
 
-      // Make a test HTTP request to your signup endpoint
       const res = await request(app)
         .post('/auth/signup')
         .send({
@@ -74,11 +73,12 @@ describe('Authentication Endpoints (Mocked)', () => {
           password: 'newpassword',
         });
 
-      // Verify the response is what we expect
+      const endTime = performance.now();
+      console.log(`Mocked Signup Success Test Duration: ${(endTime - startTime).toFixed(2)}ms`);
+
       expect(res.statusCode).toEqual(201);
       expect(res.body).toHaveProperty('token');
 
-      // Verify that our Prisma methods were called correctly
       expect(mockedPrisma.user.findFirst).toHaveBeenCalledWith({
         where: { username: 'newuser' }
       });
@@ -86,6 +86,8 @@ describe('Authentication Endpoints (Mocked)', () => {
     });
 
     it('should return an error if username already exists', async () => {
+      const startTime = performance.now();
+      
       // Mock findFirst to return an existing user
       mockedPrisma.user.findFirst.mockResolvedValue({
         id: 1,
@@ -100,20 +102,23 @@ describe('Authentication Endpoints (Mocked)', () => {
           password: 'newpassword',
         });
 
+      const endTime = performance.now();
+      console.log(`Mocked Signup Error Test Duration: ${(endTime - startTime).toFixed(2)}ms`);
+
       expect(res.statusCode).toEqual(400);
       expect(res.body).toHaveProperty('error', 'Username already taken');
       
-      // Verify findFirst was called with correct parameters
       expect(mockedPrisma.user.findFirst).toHaveBeenCalledWith({
         where: { username: 'newuser' }
       });
-      // Verify create was not called since user exists
       expect(mockedPrisma.user.create).not.toHaveBeenCalled();
     });
   });
 
   describe('POST /auth/signin', () => {
     it('should authenticate an existing user and return a token', async () => {
+      const startTime = performance.now();
+      
       // Create a real hashed password that matches 'password123'
       const hashedPassword = bcrypt.hashSync('password123', 8);
       
@@ -131,16 +136,20 @@ describe('Authentication Endpoints (Mocked)', () => {
           password: 'password123',
         });
 
+      const endTime = performance.now();
+      console.log(`Mocked Signin Success Test Duration: ${(endTime - startTime).toFixed(2)}ms`);
+
       expect(res.statusCode).toEqual(200);
       expect(res.body).toHaveProperty('token');
       
-      // Verify findFirst was called with correct parameters
       expect(mockedPrisma.user.findFirst).toHaveBeenCalledWith({
         where: { username: 'testuser' }
       });
     });
 
     it('should return an error if credentials are invalid', async () => {
+      const startTime = performance.now();
+      
       // Create a real hashed password that matches 'password123'
       const hashedPassword = bcrypt.hashSync('password123', 8);
       
@@ -155,13 +164,15 @@ describe('Authentication Endpoints (Mocked)', () => {
         .post('/auth/signin')
         .send({
           username: 'testuser',
-          password: 'wrongpassword', // Using wrong password
+          password: 'wrongpassword',
         });
+
+      const endTime = performance.now();
+      console.log(`Mocked Signin Error Test Duration: ${(endTime - startTime).toFixed(2)}ms`);
 
       expect(res.statusCode).toEqual(401);
       expect(res.body).toHaveProperty('error', 'Invalid credentials');
       
-      // Verify findFirst was called with correct parameters
       expect(mockedPrisma.user.findFirst).toHaveBeenCalledWith({
         where: { username: 'testuser' }
       });

@@ -34,20 +34,32 @@ describe('Authentication Endpoints', () => {
 
   describe('POST /auth/signup', () => {
     it('should create a new user and return a token', async () => {
+      const startTime = performance.now();
+      
       const res = await request(app)
         .post('/auth/signup')
         .send({
           username: 'newuser',
           password: 'newpassword',
         });
+
+      const endTime = performance.now();
+      console.log(`Integration Signup Success Test Duration: ${(endTime - startTime).toFixed(2)}ms`);
+
       expect(res.statusCode).toEqual(201);
       expect(res.body).toHaveProperty('token');
     });
 
     it('should return an error if username already exists', async () => {
+      const startTime = performance.now();
+      
       const res = await request(app)
         .post('/auth/signup')
         .send(userData);
+
+      const endTime = performance.now();
+      console.log(`Integration Signup Error Test Duration: ${(endTime - startTime).toFixed(2)}ms`);
+
       expect(res.statusCode).toEqual(400);
       expect(res.body).toHaveProperty('error', 'Username already taken');
     });
@@ -55,20 +67,32 @@ describe('Authentication Endpoints', () => {
 
   describe('POST /auth/signin', () => {
     it('should authenticate an existing user and return a token', async () => {
+      const startTime = performance.now();
+      
       const res = await request(app)
         .post('/auth/signin')
         .send(userData);
+
+      const endTime = performance.now();
+      console.log(`Integration Signin Success Test Duration: ${(endTime - startTime).toFixed(2)}ms`);
+
       expect(res.statusCode).toEqual(200);
       expect(res.body).toHaveProperty('token');
     });
 
     it('should return an error if credentials are invalid', async () => {
+      const startTime = performance.now();
+      
       const res = await request(app)
         .post('/auth/signin')
         .send({
           username: 'testuser',
           password: 'wrongpassword',
         });
+
+      const endTime = performance.now();
+      console.log(`Integration Signin Error Test Duration: ${(endTime - startTime).toFixed(2)}ms`);
+
       expect(res.statusCode).toEqual(401);
       expect(res.body).toHaveProperty('error', 'Invalid credentials');
     });
