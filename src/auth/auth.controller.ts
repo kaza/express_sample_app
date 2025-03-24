@@ -22,7 +22,7 @@ export const signup: RequestHandler = async (
   const newUser = await AuthService.createUser(userData)
   const token = AuthService.generateJWT(newUser.id)
 
-  res.status(200).json({
+  res.status(201).json({
     message: `Registered successfully`,
     user: newUser,
     token
@@ -39,11 +39,11 @@ export const signin: RequestHandler = async (
   const existing = await AuthService.findUserByUsername(username)
 
   if (!existing) {
-    return next(new AppError('validation', 'Account not found.'))
+    return next(new AppError('unauthorized', 'Invalid credentials'))
   }
 
   if (!AuthService.comparePasswords(password, existing.password)) {
-    return next(new AppError('validation', 'Invalid login.'))
+    return next(new AppError('unauthorized', 'Invalid credentials'))
   }
 
   const token = AuthService.generateJWT(existing.id)

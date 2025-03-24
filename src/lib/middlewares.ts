@@ -45,7 +45,7 @@ export const errorHandler = (
   response
     .status('statusCode' in error ? (error.statusCode as number) : 500)
     .json({
-      message:
+      error:
         error instanceof AppError
           ? error.message
           : 'Oops! Something wonky happened...'
