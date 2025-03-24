@@ -54,8 +54,6 @@ describe('Authentication Endpoints (Mocked)', () => {
 
   describe('POST /auth/signup', () => {
     it('should create a new user and return a token', async () => {
-      const startTime = performance.now();
-      
       // Mock the findFirst method to return null
       mockedPrisma.user.findFirst.mockResolvedValue(null);
       
@@ -73,9 +71,6 @@ describe('Authentication Endpoints (Mocked)', () => {
           password: 'newpassword',
         });
 
-      const endTime = performance.now();
-      console.log(`Mocked Signup Success Test Duration: ${(endTime - startTime).toFixed(2)}ms`);
-
       expect(res.statusCode).toEqual(201);
       expect(res.body).toHaveProperty('token');
 
@@ -86,8 +81,6 @@ describe('Authentication Endpoints (Mocked)', () => {
     });
 
     it('should return an error if username already exists', async () => {
-      const startTime = performance.now();
-      
       // Mock findFirst to return an existing user
       mockedPrisma.user.findFirst.mockResolvedValue({
         id: 1,
@@ -102,9 +95,6 @@ describe('Authentication Endpoints (Mocked)', () => {
           password: 'newpassword',
         });
 
-      const endTime = performance.now();
-      console.log(`Mocked Signup Error Test Duration: ${(endTime - startTime).toFixed(2)}ms`);
-
       expect(res.statusCode).toEqual(400);
       expect(res.body).toHaveProperty('error', 'Username already taken');
       
@@ -117,8 +107,6 @@ describe('Authentication Endpoints (Mocked)', () => {
 
   describe('POST /auth/signin', () => {
     it('should authenticate an existing user and return a token', async () => {
-      const startTime = performance.now();
-      
       // Create a real hashed password that matches 'password123'
       const hashedPassword = bcrypt.hashSync('password123', 8);
       
@@ -136,9 +124,6 @@ describe('Authentication Endpoints (Mocked)', () => {
           password: 'password123',
         });
 
-      const endTime = performance.now();
-      console.log(`Mocked Signin Success Test Duration: ${(endTime - startTime).toFixed(2)}ms`);
-
       expect(res.statusCode).toEqual(200);
       expect(res.body).toHaveProperty('token');
       
@@ -148,8 +133,6 @@ describe('Authentication Endpoints (Mocked)', () => {
     });
 
     it('should return an error if credentials are invalid', async () => {
-      const startTime = performance.now();
-      
       // Create a real hashed password that matches 'password123'
       const hashedPassword = bcrypt.hashSync('password123', 8);
       
@@ -166,9 +149,6 @@ describe('Authentication Endpoints (Mocked)', () => {
           username: 'testuser',
           password: 'wrongpassword',
         });
-
-      const endTime = performance.now();
-      console.log(`Mocked Signin Error Test Duration: ${(endTime - startTime).toFixed(2)}ms`);
 
       expect(res.statusCode).toEqual(401);
       expect(res.body).toHaveProperty('error', 'Invalid credentials');
