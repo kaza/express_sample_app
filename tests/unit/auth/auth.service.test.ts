@@ -1,10 +1,10 @@
-import * as AuthService from './auth.service'
+import * as AuthService from '../../../src/auth/auth.service'
 import type { User } from '@prisma/client'
 import jwt from 'jsonwebtoken'
-import prismaMock from 'lib/__mocks__/prisma'
+import prismaMock from '../../../src/lib/__mocks__/prisma'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-vi.mock('lib/prisma')
+vi.mock('../../../src/lib/prisma')
 vi.mock('jsonwebtoken', () => ({
   default: {
     sign: vi.fn(),
