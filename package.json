@@ -13,8 +13,8 @@
     "prepare": "husky install",
     "test:unit": "vitest -c ./vitest.config.unit.ts",
     "test:unit:ui": "vitest -c ./vitest.config.unit.ts --ui",
-    "test:integration": "cmd /c scripts\\run-integration.bat",
-    "test:integration:direct": "docker-compose up -d && npx prisma db push --skip-generate && npx vitest -c ./vitest.config.integration.ts run --no-watch && docker-compose down",
+    "test:integration": "npx vitest -c ./vitest.config.integration.ts run",
+    "test:integration:docker": "docker-compose up -d && npx prisma db push --skip-generate && npx vitest -c ./vitest.config.integration.ts run --no-watch && docker-compose down",
     "postinstall": "node -e \"if (process.platform !== 'win32') { require('fs').chmodSync('./scripts/run-integration.sh', '755') }\""
   },
   "dependencies": {
