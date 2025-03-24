@@ -32,8 +32,7 @@ export class MockAuthService implements IAuthService {
     return bcrypt.compareSync(input, encrypted);
   }
 
-  // Helper method to clear mock data
-  clearUsers() {
+  clearUsers(): void {
     this.users = [];
   }
 } 
