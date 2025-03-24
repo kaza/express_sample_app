@@ -11,19 +11,25 @@ describe('Authentication Endpoints', () => {
     password: 'password123',
   };
 
-  beforeAll(async () => {
-    const hashedPassword = bcrypt.hashSync(userData.password, 8);
-    await prisma.user.create({
-      data: {
-        username: userData.username,
-        password: hashedPassword,
-      },
-    });
+  // Create the test user before each test (because reset-db clears the database before each test)
+  beforeEach(async () => {
+    try {
+      const hashedPassword = bcrypt.hashSync(userData.password, 8);
+      await prisma.user.create({
+        data: {
+          username: userData.username,
+          password: hashedPassword,
+        },
+      });
+    } catch (error) {
+      console.error('Error setting up test database:', error);
+      throw error;
+    }
   });
 
   afterAll(async () => {
     await prisma.user.deleteMany();
-    await prisma.$disconnect();
+   // await prisma.$disconnect();
   });
 
   describe('POST /auth/signup', () => {

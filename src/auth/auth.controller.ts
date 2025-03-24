@@ -15,7 +15,7 @@ export const signup: RequestHandler = async (
 
   if (await AuthService.findUserByUsername(userData.username)) {
     return next(
-      new AppError('validation', 'A user already exists with that username')
+      new AppError('validation', 'Username already taken')
     )
   }
 
