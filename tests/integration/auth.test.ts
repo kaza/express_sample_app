@@ -1,6 +1,6 @@
 import request from 'supertest';
-import app from '../lib/createServer';
-import prisma from '../lib/prisma';
+import app from '../../src/lib/createServer';
+import prisma from '../../src/lib/prisma';
 import bcrypt from 'bcrypt';
 //import { comparePasswords } from '../auth/auth.service';
 // import { hashPassword } from     '../src/utils/auth';

@@ -2,15 +2,19 @@
 import { defineConfig } from 'vitest/config'
 import * as fs from 'fs'
 import * as dotenv from 'dotenv'
+import * as path from 'path'
 
-// Manually load .env file
+// Load test environment variables
 try {
-  const envConfig = dotenv.parse(fs.readFileSync('.env'))
-  for (const k in envConfig) {
-    process.env[k] = envConfig[k]
+  const testEnvPath = path.resolve(process.cwd(), '.env.test');
+  if (fs.existsSync(testEnvPath)) {
+    const envConfig = dotenv.parse(fs.readFileSync(testEnvPath));
+    for (const k in envConfig) {
+      process.env[k] = envConfig[k];
+    }
   }
 } catch (error) {
-  console.error('Error loading .env file:', error)
+  console.error('Error loading .env.test file:', error);
 }
 
 // Explicitly set DATABASE_URL if not already set
